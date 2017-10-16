@@ -1,0 +1,12 @@
+MUSICADOS!
+
+VARIABLES:
+
+PIEZA pieza!
+
+INICIO:
+
+pieza => do{CORCHEA, 1L} + re{FUSA, 2E}
+DIBUJAR pieza!
+
+FIN!

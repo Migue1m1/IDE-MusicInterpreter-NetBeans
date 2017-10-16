@@ -1,0 +1,56 @@
+import java_cup.runtime.*;
+import javafx.scene.control.TextArea;
+import javafx.application.Platform;
+
+parser code
+{:
+    private TextArea out;
+
+    public void setOut(TextArea t) {
+        out = t;
+    }
+
+	public void syntax_error(Symbol s) {
+	    Platform.runLater(() -> {
+        	        if (s.sym != ide.sym.EXITO)
+                    out.setText(out.getText() +"Error de sintaxis en <" + s.left
+                            + ", " + s.right + ">, cerca de: " + s.value + "\n");
+                });
+	}
+
+	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+
+	}
+:}
+
+terminal ESPACIOS, ASIGNACION, FIN_LINEA, LLAVE_ABRE, LLAVE_CIERRA, COMMA, SUMA, EXITO;
+terminal TIPO_PIEZA, TIEMPO, FUNCION_DIBUJAR, FUNCION_REPRODUCIR, FIN, SECCION_NOMBREPROGRAMA;
+terminal SECCION_VARIABLES, NOTA, POSICION, VARIABLE, INICIO;
+
+non terminal program, program_title, seccion_variables, def_variables, seccion_proceso;
+non terminal instruccion, instrucciones, movimientos, movimiento, fin;
+
+program ::= program_title seccion_variables seccion_proceso fin;
+
+program_title ::= SECCION_NOMBREPROGRAMA FIN_LINEA;
+
+seccion_variables ::= SECCION_VARIABLES def_variables FIN_LINEA;
+
+def_variables ::= TIPO_PIEZA VARIABLE
+		        | def_variables COMMA VARIABLE;
+
+seccion_proceso ::= INICIO instrucciones;
+
+instruccion ::= VARIABLE ASIGNACION movimientos FIN_LINEA
+			  | FUNCION_DIBUJAR VARIABLE FIN_LINEA
+		      | FUNCION_REPRODUCIR VARIABLE FIN_LINEA;
+
+instrucciones ::= instruccion
+		        | instrucciones instruccion;
+
+movimientos ::=  movimiento
+               | movimientos SUMA movimiento;
+
+movimiento ::= NOTA LLAVE_ABRE TIEMPO COMMA POSICION LLAVE_CIERRA;
+
+fin ::= FIN FIN_LINEA;

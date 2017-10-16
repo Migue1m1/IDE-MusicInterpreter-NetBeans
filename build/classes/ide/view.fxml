@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" style="-fx-background-color: #4c4c4c;" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ide.Controller">
+   <children>
+      <TextArea fx:id="txtEntrada" layoutX="9.0" layoutY="7.0" prefHeight="431.0" prefWidth="369.0" style="-fx-control-inner-background:#4c4c4c; " />
+      <ImageView fx:id="imgRun" fitHeight="45.0" fitWidth="45.0" layoutX="494.0" layoutY="40.0" onMouseClicked="#runCompiler" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/img/ic_play.png" />
+         </image>
+      </ImageView>
+      <TextArea fx:id="txtSalida" editable="false" layoutX="394.0" layoutY="103.0" prefHeight="334.0" prefWidth="245.0" style="-fx-control-inner-background: #4c4c4c; -fx-text-fill: red" />
+   </children>
+</Pane>

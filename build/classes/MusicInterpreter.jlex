@@ -1,0 +1,147 @@
+import java.lang.System;
+import java_cup.runtime.Symbol;
+import javafx.scene.control.TextArea;
+import javafx.application.Platform;
+
+%%
+
+%{
+    public TextArea out;
+
+    public void setOut(TextArea t) {
+        out = t;
+    }
+%}
+
+%eofval{
+    {
+        Platform.runLater(() -> {
+            out.setText("Compilación exitosa\n");
+        });
+    	return new Symbol(ide.sym.EXITO, 0, 0, ide.sym.EXITO);
+    }
+%eofval}
+
+%cup
+%line
+%char
+%full
+%notunix
+
+Espacios = [ \t\r\f\n]
+Asignacion = "=>"
+FinLinea = "!"
+LlaveAbre = "{"
+LlaveCierra = "}"
+Comma = ","
+Suma = "+"
+Tipo_Pieza = "PIEZA"
+Tiempo = ("REDONDA"|"BLANCA"|"NEGRA"|"CORCHEA"|"SEMICORCHEA"|"FUSA"|"SEMIFUSA")
+Funcion_Dibujar = "DIBUJAR"
+Funcion_Reproducir = "REPRODUCIR"
+Fin = "FIN"
+Seccion_NombrePrograma = [A-Z]+
+Seccion_Variables = "VARIABLES:"
+Nota = ("do"|"do#"|"re"|"re#"|"mi"|"fa"|"fa#"|"sol"|"sol#"|"la"|"la#"|"si")
+Posicion = ("1L"|"2L"|"3L"|"4L"|"5L"|"1E"|"2E"|"3E"|"4E")
+Variable = [a-z]+
+Inicio = "INICIO:"
+
+%%
+<YYINITIAL>
+{Asignacion}
+{
+    return new Symbol(ide.sym.ASIGNACION, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{FinLinea}
+{
+    return new Symbol(ide.sym.FIN_LINEA, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{LlaveAbre}
+{
+    return new Symbol(ide.sym.LLAVE_ABRE, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{LlaveCierra}
+{
+    return new Symbol(ide.sym.LLAVE_CIERRA, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Comma}
+{
+    return new Symbol(ide.sym.COMMA, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Suma}
+{
+    return new Symbol(ide.sym.SUMA, yyline, yychar, yytext());
+}
+
+<YYINITIAL>
+{Tipo_Pieza}
+{
+    return new Symbol(ide.sym.TIPO_PIEZA, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Tiempo}
+{
+    return new Symbol(ide.sym.TIEMPO, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Funcion_Dibujar}
+{
+    return new Symbol(ide.sym.FUNCION_DIBUJAR, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Funcion_Reproducir}
+{
+    return new Symbol(ide.sym.FUNCION_REPRODUCIR, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Fin}
+{
+    return new Symbol(ide.sym.FIN, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Seccion_NombrePrograma}
+{
+    return new Symbol(ide.sym.SECCION_NOMBREPROGRAMA, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Seccion_Variables}
+{
+    return new Symbol(ide.sym.SECCION_VARIABLES, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Nota}
+{
+    return new Symbol(ide.sym.NOTA, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Posicion}
+{
+    return new Symbol(ide.sym.POSICION, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Variable}
+{
+    return new Symbol(ide.sym.VARIABLE, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Inicio}
+{
+    return new Symbol(ide.sym.INICIO, yyline, yychar, yytext());
+}
+<YYINITIAL>
+{Espacios}
+{}
+<YYINITIAL> .
+{
+    Platform.runLater(() -> {
+        out.setText(out.getText()
+            + "Error lexico en <" + yyline + ", " + yychar + ">, no se reconoce: " + yytext() + "\n");
+    });
+    yychar = 0;
+}
